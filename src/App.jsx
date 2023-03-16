@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import reactLogo from './assets/react.svg';
+import cover from './assets/cover2.jpg';
 import noimage from './assets/poster_not_found.png';
 import { getMovieList, searchMovie } from './api';
 import './App.css';
@@ -65,7 +66,6 @@ const App = () => {
         onChange={({ target }) => search(target.value)}
       />
       <div className="container">
-        {/* <Latest /> */}
         <PopularMoviesList />
       </div>
     </div>
