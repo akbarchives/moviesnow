@@ -1,34 +1,78 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import { useEffect, useState } from 'react';
 
-function App() {
-  const [count, setCount] = useState(0)
+import reactLogo from './assets/react.svg';
+import { getMovieList, searchMovie } from './api';
+import './App.css';
+
+const App = () => {
+  const [popularMovies, setPopularMovies] = useState([]);
+
+  useEffect(() => {
+    // setPopularMovies(getMovieList());
+    getMovieList().then(result => {
+      setPopularMovies(result);
+    });
+  }, []);
+
+  console.log({ popularMovies: popularMovies[0] });
+
+  const Latest = () => {
+    return popularMovies.map((movie, i) => {
+      return (
+        <div key={i}>
+          <h1>{movie.title}</h1>
+        </div>
+      );
+    });
+  };
+
+  const PopularMoviesList = () => {
+    return popularMovies.map((movie, i) => {
+      return (
+        <div
+          className="movie-card"
+          key={1}
+        >
+          <img
+            src={`${import.meta.env.VITE_REACT_APP_BASEIMGURL}/${movie.poster_path}`}
+            alt=""
+            className="movie-img"
+          />
+          <div className="movie-card-detail">
+            <div className="movie-title">{movie.title}</div>
+            <div className="movie-rating">
+              ⭐ {movie.vote_average} {movie.genre_ids[0]}
+            </div>
+            <div className="movie-desc">{movie.overview}</div>
+          </div>
+        </div>
+      );
+    });
+  };
+
+  const search = q => {
+    console.log({ q });
+  };
 
   return (
     <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <header>
+        <h1>Moviesnow</h1>
+      </header>
+      <input
+        type="text"
+        placeholder="Find Movies Title"
+        name=""
+        id=""
+        className="movie-search"
+        onChange={({ target }) => search(target.value)}
+      />
+      <div className="container">
+        <Latest />
+        <PopularMoviesList />
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;
