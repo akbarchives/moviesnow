@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import reactLogo from './assets/react.svg';
+import noimage from './assets/poster_not_found.png';
 import { getMovieList, searchMovie } from './api';
 import './App.css';
 
@@ -8,23 +9,10 @@ const App = () => {
   const [popularMovies, setPopularMovies] = useState([]);
 
   useEffect(() => {
-    // setPopularMovies(getMovieList());
     getMovieList().then(result => {
       setPopularMovies(result);
     });
   }, []);
-
-  console.log({ popularMovies: popularMovies[0] });
-
-  const Latest = () => {
-    return popularMovies.map((movie, i) => {
-      return (
-        <div key={i}>
-          <h1>{movie.title}</h1>
-        </div>
-      );
-    });
-  };
 
   const PopularMoviesList = () => {
     return popularMovies.map((movie, i) => {
@@ -34,24 +22,33 @@ const App = () => {
           key={1}
         >
           <img
-            src={`${import.meta.env.VITE_REACT_APP_BASEIMGURL}/${movie.poster_path}`}
+            src={[
+              `${import.meta.env.VITE_REACT_APP_BASEIMGURL}/${movie.poster_path}`.length > 50
+                ? `${import.meta.env.VITE_REACT_APP_BASEIMGURL}/${movie.poster_path}`
+                : `${noimage}`,
+            ]}
             alt=""
             className="movie-img"
           />
           <div className="movie-card-detail">
-            <div className="movie-title">{movie.title}</div>
-            <div className="movie-rating">
-              ⭐ {movie.vote_average} {movie.genre_ids[0]}
+            <div className="movie-title">
+              {movie.title} ({movie.release_date.slice(0, 4)})
             </div>
-            <div className="movie-desc">{movie.overview}</div>
+            <div className="movie-rating">⭐ {Math.round(movie.vote_average * 10) / 10}</div>
+            <div className="movie-desc">
+              {movie.overview.slice(0, 250).length >= 250 ? `${movie.overview.slice(0, 250)}...` : `${movie.overview.slice(0, 250)}`}
+            </div>
           </div>
         </div>
       );
     });
   };
 
-  const search = q => {
-    console.log({ q });
+  const search = async q => {
+    if (q.length > 2) {
+      const query = await searchMovie(q);
+      setPopularMovies(query.results);
+    }
   };
 
   return (
@@ -68,7 +65,7 @@ const App = () => {
         onChange={({ target }) => search(target.value)}
       />
       <div className="container">
-        <Latest />
+        {/* <Latest /> */}
         <PopularMoviesList />
       </div>
     </div>

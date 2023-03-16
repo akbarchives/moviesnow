@@ -56,7 +56,6 @@ header {
 
 .movie-img {
   width: 100%;
-  background-color: pink;
 }
 
 .movie-card-detail {
@@ -71,6 +70,13 @@ header {
 
 .movie-rating {
   text-align: left;
+  font-size: 20px;
+  font-weight: 800;
+  /* background: #645caa; */
+  border-radius: 20px;
+  /* padding: 6px; */
+  /* width: 65px; */
+  color: black;
 }
 
 .movie-desc {
