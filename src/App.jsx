@@ -39,6 +39,14 @@ const App = () => {
             <div className="movie-desc">
               {movie.overview.slice(0, 250).length >= 250 ? `${movie.overview.slice(0, 250)}...` : `${movie.overview.slice(0, 250)}`}
             </div>
+            <a
+              href="#"
+              data-toggle="modal"
+              data-target="myBtn"
+              className="btn-details"
+            >
+              see details
+            </a>
           </div>
         </div>
       );
